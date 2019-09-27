@@ -30,6 +30,11 @@
               width: 60px;
               height: 104px;
               background: #6C6;
+              display: flex;
+              -webkit-align-items: center;
+              align-items: center;
+              -webkit-justify-content: center;
+              justify-content: center;
             }
 
             .hex .right {
@@ -47,6 +52,24 @@
             .hex:nth-child(even) {
               margin-top: 53px;
             }
+
+            .atual {
+                width: 100%;
+                height: 100%;
+                background: url('/img/token1.png') no-repeat;
+                background-size: contain;
+            }
         </style>
     </head>
     <body>
+        <header class="sticky-top">
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="#">
+                    <span>HP = 30</span>
+                    <span>ATK = 1</span>
+                    <span>DEF = 1</span>
+                    <span>GOLD = 8</span>
+                    <a class="btn btn-warning" id="roll" style="cursor: pointer">rolar</a>
+                </a>
+            </nav>
+        </header>
