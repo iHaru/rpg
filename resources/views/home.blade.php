@@ -244,7 +244,7 @@
         </div>
         <div class="hex">
             <div class="left"></div>
-            <div class="middle" id="19"><div></div></div>
+            <div class="middle" id="19" data-def="3"><div></div></div>
             <div class="right"></div>
         </div>
         <div class="hex invisible">
@@ -471,7 +471,7 @@
                 lorem ipsum
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
+                <button type="button" class="btn btn-secondary" onclick="rollGold(this)" data-gold="6">escolha 1</button>
                 <button type="button" class="btn btn-primary">escolha 2</button>
             </div>
           </div>
@@ -491,7 +491,7 @@
                 lorem ipsum
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
+                <button type="button" class="btn btn-secondary"">escolha 1</button>
                 <button type="button" class="btn btn-primary">escolha 2</button>
             </div>
           </div>
@@ -731,7 +731,7 @@
                 lorem ipsum
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
+                <button type="button" class="btn btn-secondary" onclick="rollGold(this)" data-gold="8">escolha 1</button>
                 <button type="button" class="btn btn-primary">escolha 2</button>
             </div>
           </div>

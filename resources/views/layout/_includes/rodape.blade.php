@@ -13,47 +13,77 @@
                     var id = Number($('.atual').parents('div').attr("id"));
                     $('.atual').removeClass('atual');
                     var dado = (Math.floor(Math.random() * 6)) + 1;
-                    var novaPosicao = 1 + id;
+                    var novaPosicao = dado + id;
                     $('#' + novaPosicao + ' div').addClass('atual');
                     setTimeout(() => {
                         $('#modal' + novaPosicao).modal('toggle');
+                        $('#roll').removeClass('disabled');
                         setTimeout(() => {
                             editAttr(novaPosicao);
                         }, 500);
                     }, 500);
+                    $('#roll').addClass('disabled');
+                    $('#roll').attr('aria-disabled', 'true');
                 })
 
                 $('.hex:not(.invisible)').click(function() {
-                    var id = Number(jQuery(this).children('.middle').attr('id'));
+                    var id = Number($(this).children('.middle').attr('id'));
                     $('#modal' + id).modal('toggle');
                 });
 
-                function editAttr(posicao) {
-                    var posicao = posicao;
+                $('.modal').on('show.bs.modal', function() {
+                    var modalAberto = $(this).attr('id');
+                    var modalAbertolength = modalAberto.length;
+                    modalAberto = Number(modalAberto.slice(5, modalAbertolength));
 
-                    var antigoatk = $("span:contains('ATK')").text();
-                    var antigoatklength = antigoatk.length;
-                    antigoatk = Number(antigoatk.slice(6, antigoatklength));
+                    var id = Number($('.atual').parents('div').attr("id"));
 
-                    var antigodef;
-                    var antigogold;
-
-                    var atk = Number($('#' + posicao).attr('data-ataque'));
-                    atk += antigoatk;
-
-                    var def = $('#' + posicao).attr('data-def');
-                    var gold = $('#' + posicao).attr('data-gold');
-                    if (atk != undefined) {
-                    $("span:contains('ATK')").replaceWith('ATK = ' + atk);
+                    if (id != modalAberto) {
+                        $('#modal' + modalAberto + ' .modal-footer .btn').addClass('disabled');
                     }
-                    if (def != undefined) {
-                        $("span:contains('DEF')").replaceWith('DEF = ' + def);
-                    }
-                    if (gold != undefined) {
-                        $("span:contains('GOLD')").replaceWith('GOLD = ' + gold);
-                    }
-                }
+                })
+
+                $('.modal').on('hide.bs.modal', function() {
+                    $('.modal .modal-footer .btn').removeClass('disabled');
+                })
             })
+
+            function rollGold(posicao) {
+                var dado = (Math.floor(Math.random() * 6)) + 1;
+                console.log(dado);
+                var antigogold = $("span:contains('GOLD')").text();
+                var antigogoldlength = antigogold.length;
+                antigogold = Number(antigogold.slice(7, antigogoldlength));
+
+                var gold = Number($(posicao).attr('data-gold'));
+                gold = antigogold + (dado * gold);
+
+                $("span:contains('GOLD')").replaceWith('<span>GOLD = ' + gold+ '</span>');
+            }
+
+            function editAttr(posicao) {
+                var posicao = posicao;
+
+                var antigoatk = $("span:contains('ATK')").text();
+                var antigoatklength = antigoatk.length;
+                antigoatk = Number(antigoatk.slice(6, antigoatklength));
+
+                var antigodef = $("span:contains('DEF')").text();;
+                var antigodeflength = antigodef.length;
+                antigodef = Number(antigodef.slice(6, antigodeflength));
+
+                var atk = Number($('#' + posicao).attr('data-ataque'));
+                var def = Number($('#' + posicao).attr('data-def'));
+
+                if (atk != undefined && !isNaN(atk)) {
+                    atk += antigoatk;
+                    $("span:contains('ATK')").replaceWith('<span>ATK = ' + atk+ '</span>');
+                }
+                if (def != undefined && !isNaN(def)) {
+                    def += antigodef;
+                    $("span:contains('DEF')").replaceWith('<span>DEF = ' + def + '</span>');
+                }
+            }
         </script>
     </body>
 </html>
