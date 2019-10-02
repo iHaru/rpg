@@ -7,13 +7,13 @@
 
         <script>
             $(document).ready(function () {
-                $('#1 div').addClass('atual');
+                var iniciacao = null; //PLAYER = 1 | NPC = 0
 
                 $("#roll").click(function () {
                     var id = Number($('.atual').parents('div').attr("id"));
                     $('.atual').removeClass('atual');
-                    var dado = (Math.floor(Math.random() * 6)) + 1;
-                    var novaPosicao = dado + id;
+                    var dado = rollDado();
+                    var novaPosicao = 2 + id;
                     $('#' + novaPosicao + ' div').addClass('atual');
                     setTimeout(() => {
                         $('#modal' + novaPosicao).modal('toggle');
@@ -39,38 +39,60 @@
                     var id = Number($('.atual').parents('div').attr("id"));
 
                     if (id != modalAberto) {
-                        $('#modal' + modalAberto + ' .modal-footer .btn').addClass('disabled');
+                        $('#modal' + modalAberto + ' .modal-footer .btn').attr('disabled', 'true');
                     }
                 })
 
                 $('.modal').on('hide.bs.modal', function() {
-                    $('.modal .modal-footer .btn').removeClass('disabled');
+                    $('.modal .modal-footer .btn').removeAttr('disabled');
                 })
             })
 
-            function rollGold(posicao) {
-                var dado = (Math.floor(Math.random() * 6)) + 1;
-                console.log(dado);
-                var antigogold = $("span:contains('GOLD')").text();
+            function attrAtual() {
+                var atributos = new Object();
+
+                var antigoatk = $("a span:contains('ATK')").text();
+                var antigoatklength = antigoatk.length;
+                antigoatk = Number(antigoatk.slice(6, antigoatklength));
+                atributos.atk = antigoatk;
+
+                var antigodef = $("a span:contains('DEF')").text();
+                var antigodeflength = antigodef.length;
+                antigodef = Number(antigodef.slice(6, antigodeflength));
+                atributos.def = antigodef;
+
+                var antigohp = $("a span:contains('HP')").text();
+                var antigohplength = antigohp.length;
+                antigohp = Number(antigohp.slice(5, antigohplength));
+                atributos.hp = antigohp;
+
+
+                var antigogold = $("a span:contains('GOLD')").text();
                 var antigogoldlength = antigogold.length;
                 antigogold = Number(antigogold.slice(7, antigogoldlength));
+                atributos.gold = antigogold;
+
+                return atributos;
+            }
+
+            function rollGold(posicao) {
+                var dado = rollDado();
+                var atributos = attrAtual();
+
+                var antigogold = atributos.gold;
 
                 var gold = Number($(posicao).attr('data-gold'));
                 gold = antigogold + (dado * gold);
 
-                $("span:contains('GOLD')").replaceWith('<span>GOLD = ' + gold+ '</span>');
+                $("a span:contains('GOLD')").replaceWith('<span>GOLD = ' + gold + '</span>');
             }
 
             function editAttr(posicao) {
                 var posicao = posicao;
+                var atributos = attrAtual();
 
-                var antigoatk = $("span:contains('ATK')").text();
-                var antigoatklength = antigoatk.length;
-                antigoatk = Number(antigoatk.slice(6, antigoatklength));
-
-                var antigodef = $("span:contains('DEF')").text();;
-                var antigodeflength = antigodef.length;
-                antigodef = Number(antigodef.slice(6, antigodeflength));
+                var antigoatk = atributos.atk;
+                var antigodef = atributos.def;
 
                 var atk = Number($('#' + posicao).attr('data-ataque'));
                 var def = Number($('#' + posicao).attr('data-def'));
@@ -83,6 +105,85 @@
                     def += antigodef;
                     $("span:contains('DEF')").replaceWith('<span>DEF = ' + def + '</span>');
                 }
+            }
+
+            function rollDado() {
+                var dado = (Math.floor(Math.random() * 6)) + 1;
+
+                return dado;
+            }
+
+            function atacar(elemento) {
+                var atkInimigo = Number($(elemento).parents('div.modal').attr('data-ataque'));
+                var defInimigo = Number($(elemento).parents('div.modal').attr('data-def'));
+                var hpInimigo = Number($(elemento).parents('div.modal').attr('data-hp'));
+
+                atributos = attrAtual();
+
+                if (iniciacao == 0) {
+                    var danoInimigo = (rollDado() + atkInimigo) - atributos.def;
+                    atributos.hp = atributos.hp - danoInimigo;
+                    $(elemento).parents('div.modal').find('.modal-body p#relatorio').append('<br> Você recebeu ' + danoInimigo + ' de dano!')
+
+                    $("a span:contains('HP')").replaceWith('<span>HP = ' + atributos.hp + '</span>');
+
+                    iniciacao = 1;
+                } else {
+                    var danoPlayer = (rollDado() + atributos.atk) - defInimigo;
+                    hpInimigo = hpInimigo - danoPlayer;
+                    $(elemento).parents('div.modal').find('.modal-body p span').replaceWith('<span>HP = ' + hpInimigo + '</span>');
+                    $(elemento).parents('div.modal').attr('data-hp', hpInimigo);
+                    $(elemento).parents('div.modal').find('.modal-body p#relatorio').append('<br> Você deu ' + danoPlayer + ' de dano!')
+
+                    if (hpInimigo == 0 || hpInimigo < 0) {
+                        $(elemento).parents('div.modal').find('.modal-body #stats').replaceWith('<p>Você derrotou!</p>');
+                        $(elemento).attr('disabled', 'true');
+                        $(elemento).next().attr('disabled', 'true');
+                    }
+
+                    iniciacao = 0;
+                    //atacar(elemento);
+                }
+
+                console.log(iniciacao, danoPlayer, danoInimigo);
+            }
+
+            function fugir() {
+                var atributos = attrAtual();
+                var gold = atributos.gold - (rollDado() * 2);
+
+                if (gold < 0) {
+                    gold = 0;
+                    $("a span:contains('GOLD')").replaceWith('<span>GOLD = ' + gold + '</span>');
+
+                } else {
+                    $("a span:contains('GOLD')").replaceWith('<span>GOLD = ' + gold + '</span>');
+                }
+
+            }
+
+            function initiate(btn) {
+                do {
+                    var player = rollDado();
+                    var npc = rollDado();
+
+                    if (player > npc) {
+                        iniciacao = 1;
+                    } else if (npc > player) {
+                        iniciacao = 0;
+                    }
+                } while (player == npc);
+
+                $(btn).parents('div.modal').find('.modal-body p#relatorio').append('<br> Você tirou ' + player + ' no dado!')
+                $(btn).parents('div.modal').find('.modal-body p#relatorio').append('<br> Seu inimigo tirou ' + npc + ' no dado!')
+                if (player > npc) {
+                    $(btn).parents('div.modal').find('.modal-body p#relatorio').append('<br> <b>O primeiro turno é seu!</b><br>');
+                } else {
+                    $(btn).parents('div.modal').find('.modal-body p#relatorio').append('<br> <b>O primeiro turno é do seu inimigo!</b><br>');
+                }
+                $(btn).addClass('invisible');
+                $(btn).next().removeAttr('hidden');
+
             }
         </script>
     </body>

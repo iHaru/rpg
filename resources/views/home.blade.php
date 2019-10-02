@@ -9,7 +9,7 @@
     <div class="hex-row">
         <div class="hex">
             <div class="left"></div>
-            <div class="middle" id="1"><div></div></div>
+            <div class="middle" id="1"><div class="atual"></div></div>
             <div class="right"></div>
         </div>
         <div class="hex">
@@ -410,15 +410,11 @@
 
                 <p>+3 de Ataque.</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
-                <button type="button" class="btn btn-primary">escolha 2</button>
-            </div>
           </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-hidden="true" data-hp="10" data-ataque="1" data-def="1">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -428,11 +424,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                lorem ipsum
+                <p>Um estranho goblin aparece no seu caminho</p>
+
+                <p id="stats"><span>HP = 10</span> | DEF = 1 | ATK = 1</p>
+
+                <p id="relatorio">--RELATORIO DE COMBATE--</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
-                <button type="button" class="btn btn-primary">escolha 2</button>
+                <button type="button" class="btn btn-secondary" onclick="initiate(this)">COMEÇAR BATALHA</button>
+                <button type="button" class="btn btn-secondary" onclick="atacar(this)" hidden>ATACAR</button>
+                <button type="button" class="btn btn-primary" onclick="fugir()">FUGIR</button>
             </div>
           </div>
         </div>
@@ -478,7 +479,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-hidden="true"  data-hp="25" data-ataque="3" data-def="1">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -491,8 +492,9 @@
                 lorem ipsum
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"">escolha 1</button>
-                <button type="button" class="btn btn-primary">escolha 2</button>
+                <button type="button" class="btn btn-secondary" onclick="initiate(this)">COMEÇAR BATALHA</button>
+                <button type="button" class="btn btn-secondary" onclick="atacar(this)" hidden>ATACAR</button>
+                <button type="button" class="btn btn-primary" onclick="fugir()">FUGIR</button>
             </div>
           </div>
         </div>

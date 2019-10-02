@@ -59,6 +59,10 @@
                 background: url('/img/token1.png') no-repeat;
                 background-size: contain;
             }
+
+            .modal-dialog {
+                margin-top: 70px;
+            }
         </style>
     </head>
     <body>
