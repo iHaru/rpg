@@ -74,6 +74,7 @@
                     <span>DEF = 1</span>
                     <span>GOLD = 8</span>
                     <a class="btn btn-warning" id="roll" style="cursor: pointer">rolar</a>
+                    <a class="btn btn-warning" id="bag" style="cursor: pointer">bolsa</a>
                 </a>
             </nav>
         </header>

@@ -8,13 +8,27 @@
         <script>
             $(document).ready(function () {
                 var iniciacao = null; //PLAYER = 1 | NPC = 0
+                var machucou = 3;
+                artefatos = [{nome: 'Poção da vida', id: 0}];
 
                 $("#roll").click(function () {
                     var id = Number($('.atual').parents('div').attr("id"));
                     $('.atual').removeClass('atual');
                     var dado = rollDado();
-                    var novaPosicao = 2 + id;
+                    var novaPosicao = 6 + id;
+
+                    if (machucou < 3) {
+                        novaPosicao = Math.round((dado / 2) + id);
+                        machucou++;
+                    };
+
+                    if (novaPosicao == 4) {
+                        machucou = 1;
+                    };
+
                     $('#' + novaPosicao + ' div').addClass('atual');
+                    $('#modal' + novaPosicao + ' .modal-footer .btn').removeAttr('disabled');
+
                     setTimeout(() => {
                         $('#modal' + novaPosicao).modal('toggle');
                         $('#roll').removeClass('disabled');
@@ -24,7 +38,7 @@
                     }, 500);
                     $('#roll').addClass('disabled');
                     $('#roll').attr('aria-disabled', 'true');
-                })
+                });
 
                 $('.hex:not(.invisible)').click(function() {
                     var id = Number($(this).children('.middle').attr('id'));
@@ -41,10 +55,11 @@
                     if (id != modalAberto) {
                         $('#modal' + modalAberto + ' .modal-footer .btn').attr('disabled', 'true');
                     }
-                })
+                });
 
-                $('.modal').on('hide.bs.modal', function() {
-                    $('.modal .modal-footer .btn').removeAttr('disabled');
+                $('#bag').click(function () {
+                    $('#modalBag').modal('toggle');
+                    listArtefato();
                 })
             })
 
@@ -133,19 +148,16 @@
                     hpInimigo = hpInimigo - danoPlayer;
                     $(elemento).parents('div.modal').find('.modal-body p span').replaceWith('<span>HP = ' + hpInimigo + '</span>');
                     $(elemento).parents('div.modal').attr('data-hp', hpInimigo);
-                    $(elemento).parents('div.modal').find('.modal-body p#relatorio').append('<br> Você deu ' + danoPlayer + ' de dano!')
-
-                    if (hpInimigo == 0 || hpInimigo < 0) {
-                        $(elemento).parents('div.modal').find('.modal-body #stats').replaceWith('<p>Você derrotou!</p>');
-                        $(elemento).attr('disabled', 'true');
-                        $(elemento).next().attr('disabled', 'true');
-                    }
-
+                    $(elemento).parents('div.modal').find('.modal-body p#relatorio').append('<br> Você deu ' + danoPlayer + ' de dano!');
                     iniciacao = 0;
                     //atacar(elemento);
                 }
 
-                console.log(iniciacao, danoPlayer, danoInimigo);
+                if (hpInimigo == 0 || hpInimigo < 0) {
+                    $(elemento).parents('div.modal').find('.modal-body #stats').replaceWith('<p>Você derrotou!</p>');
+                    $(elemento).attr('disabled', 'true');
+                    $(elemento).next().attr('disabled', 'true');
+                }
             }
 
             function fugir() {
@@ -183,7 +195,43 @@
                 }
                 $(btn).addClass('invisible');
                 $(btn).next().removeAttr('hidden');
+            }
 
+            function addArtefato(elemento) {
+                var id = Number($('.atual').parents('div').attr("id"));
+                var nome = $(elemento).parents('div.modal').attr('data-nome');
+
+                artefatos.push({nome: nome, id: id});
+
+                $(elemento).attr('disabled', 'true');
+            }
+
+            function useArtefato(item) {
+                var id = $(item).attr('data-id');
+
+                switch (id) {
+                    case 7:
+                        $("a span:contains('HP')").replaceWith('<span>HP = 30</span>');
+                        for (var i = 0; i < artefatos.length; i++) {
+                            if (artefatos[i].id === id) break;
+                        }
+                        artefatos.splice(i, 1);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            function listArtefato() {
+                if (artefatos.length > 0) {
+                    for (i = 0; i < artefatos.length; i++) {
+                        if (artefatos.findIndex(val => val == artefatos[i]) < 0) {
+                            $('#modalBag .modal-dialog .modal-content .modal-body span ul')
+                            .append('<li onclick="useArtefato(this)" data-id='+artefatos[i].id+'>' + artefatos[i].nome + '</li>');
+                        }
+                    }
+                }
             }
         </script>
     </body>

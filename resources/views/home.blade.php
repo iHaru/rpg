@@ -449,11 +449,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                lorem ipsum
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
-                <button type="button" class="btn btn-primary">escolha 2</button>
+                <p>Você tropeçou em um tronco de árvore, machucando seu tornozelo.</p>
+                <p>Só consegue andar metade do valor do dado por 2 dias.</p>
             </div>
           </div>
         </div>
@@ -469,11 +466,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                lorem ipsum
+                <p>Você ve uma bolsa à esquerda da estrada.</p>
+                <p>Pode conter algum ouro.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="rollGold(this)" data-gold="6">escolha 1</button>
-                <button type="button" class="btn btn-primary">escolha 2</button>
+                <button type="button" class="btn btn-secondary" onclick="rollGold(this)" data-gold="6">Rolar o dado</button>
             </div>
           </div>
         </div>
@@ -489,7 +486,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                lorem ipsum
+                <p>
+                    Entre as árvores, você vê uma pequena criatura, parecida com uma fada, flutuando e olhando diretamente seus olhos.
+                    <br> Se você pegou alguma coisa nessa floresta, eu vou matar você.
+                </p>
+
+                <p id="stats"><span>HP = 25</span> | DEF = 1 | ATK = 3</p>
+
+                <p id="relatorio">--RELATORIO DE COMBATE--</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="initiate(this)">COMEÇAR BATALHA</button>
@@ -500,7 +504,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal7" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modal7" tabindex="-1" role="dialog" aria-hidden="true" data-nome="Cálice da floresta">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -510,11 +514,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                lorem ipsum
+                <p><h4>Uso único <br> Cura 100% da sua vida</h4></p>
+                <p>Lendas contam que basta um gole da água do sagrado cálice para curar todas suas feridas, já que o cálice contém
+                    a essência de toda a vida da foresta.
+                </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">escolha 1</button>
-                <button type="button" class="btn btn-primary">escolha 2</button>
+                <button type="button" class="btn btn-secondary" onclick="addArtefato(this)">Pegar</button>
             </div>
           </div>
         </div>
@@ -891,6 +897,28 @@
             </div>
             <div class="modal-body">
                 lorem ipsum
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary">escolha 1</button>
+                <button type="button" class="btn btn-primary">escolha 2</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalBag" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal1">TITULO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Itens que você encontrou:</p>
+                <span><ul></ul></span>
+                <p>Clique no artefato para usá-lo.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary">escolha 1</button>
